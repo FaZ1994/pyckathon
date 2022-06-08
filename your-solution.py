@@ -59,8 +59,17 @@ add_letter_btn = custom_utils.getHtmlElement("add-letter-btn")
 word_html_container = custom_utils.getHtmlElement('word')
 
 #----------------------------------------------------------------------------------------------------
+#Genera random
+def randomGenerator(num):
+    return random.randint(0, num - 1)
+#prende valore lettera utente
+def getUserLetter(self):
+     userLetter = custom_utils.getHtmlElement('user-letter').value
+     next(userLetter)
 
-
+#cerca lettera utente nella parola
+def findLetter(string, char):
+    return [i for i, letter in enumerate(string) if letter == char]
 def main():
 
     #le variabili sono definite come esempi, non siete obbligati ad utilizzarle tutte o solo queste
@@ -73,12 +82,32 @@ def main():
     global already_guessed
     global limit
 
-    
-    words = ['matto', 'gatto', 'pazzo'] # array con le parole da indovinare
+    words = ['matto', 'gatto', 'pazzo', 'gattino', 'procione'] # array con le parole da indovinare
 
     # inserisco la stringa segnaposto dentro il contenitore HTML
-    display = "___" # da modificare
+    rand = randomGenerator(len(words))
+    display = words[rand] # da modificare
+    word = display
+    display = '_'*len(words[rand])
     custom_utils.writeToHtmlElement(word_html_container, '%s' % (display))
+    button = custom_utils.getHtmlElement('add-letter-btn')
+    custom_utils.addOnClickEventToHtmlElement (button, getUserLetter)
+    
+def next(userLetter):
+    letter = userLetter
+    lettera = custom_utils.getHtmlElement('lettera')
+    if(findLetter(word, letter) == []):
+        custom_utils.writeToConsole('non trovata')
+        custom_utils.writeToHtmlElement(lettera, 'non trovata')
+    else:
+        userLett = findLetter(word, letter)
+        custom_utils.writeToHtmlElement(lettera, userLett)
+        wordlist = list(word)
+        displaylist = list(display)
+        custom_utils.writeToHtmlElement(lettera, displaylist)
+
+
+
 
 
 main()
